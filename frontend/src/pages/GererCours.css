@@ -1,0 +1,180 @@
+/* === GLOBAL === */
+html, body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f7f9fc;
+    height: 100%;
+}
+
+.layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+/* === SIDEBAR === */
+.sidebar {
+    background-color: #04345c;
+    width: 220px;
+    min-height: 100vh;
+    color: white;
+    padding-top: 30px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, width 0.3s ease;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+    background-color: #1256c3;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* === HEADER === */
+header.topbar {
+    background-color: #e0e0e0;
+    color: black;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+
+header.topbar h1 {
+    font-size: 35px;
+    margin: 0;
+}
+
+/* === MAIN === */
+.container {
+    display: flex;
+    flex: 1;
+    min-height: calc(100vh - 60px);
+    transition: all 0.3s ease;
+    overflow-x: hidden;
+}
+
+.content-wrapper {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    background-color: white;
+}
+
+.content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    padding: 40px;
+    box-sizing: border-box;
+    background-color: white;
+}
+
+main {
+    flex: 1;
+    padding: 30px;
+}
+
+h2 {
+    color: #0b3556;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* === FORMULAIRES === */
+form {
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+form input,
+form select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button[type="submit"], button.modifier, button.supprimer {
+    background-color: #b2cdf8;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+    cursor: pointer;
+    margin-right: 10px;
+}
+
+button.modifier {
+    background-color: #2d78f4;
+}
+
+button.supprimer {
+    background-color: #ee5d47;
+}
+
+.message {
+    color: green;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+.message.erreur {
+    color: red;
+}
+
+/* === TABLE === */
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+ul li {
+    margin-bottom: 10px;
+    background: #f3f3f3;
+    padding: 10px;
+    border-radius: 6px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* === FOOTER === */
+footer {
+    text-align: center;
+    font-size: 14px;
+    padding: 20px;
+    background-color: #f0f0f0;
+    color: #003d5b;
+    border-top: 1px solid #ddd;
+}
+
+/* === RESPONSIVE TABLE === */
+@media (max-width: 768px) {
+    ul li {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+}

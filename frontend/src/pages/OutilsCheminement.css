@@ -1,0 +1,71 @@
+.cheminement-container {
+  padding: 30px;
+  background-color: #fefaf7;
+  min-height: 100vh;
+}
+
+.form-cheminement {
+  display: flex;
+  flex-direction: column;
+  max-width: 500px;
+  margin-bottom: 40px;
+}
+
+.form-cheminement label {
+  margin-top: 15px;
+  font-weight: bold;
+  color: #003366;
+}
+
+.form-cheminement input,
+.form-cheminement select {
+  padding: 10px;
+  margin-top: 5px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
+
+.form-cheminement button {
+  margin-top: 20px;
+  padding: 12px;
+  background-color: #003366;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.resultat-cheminement {
+  margin-top: 30px;
+}
+
+.resultat-cheminement h3 {
+  color: #003366;
+  margin-bottom: 15px;
+}
+
+.tableau-sessions {
+  display: block;
+}
+/* === Pour laisser les blocs collés === */
+.session-block {
+  background-color: #f3f3f3;
+  padding: 15px;
+  border-left: 5px solid #003366;
+  border-radius: 5px;
+}
+
+.session-block h4 {
+  margin-bottom: 10px;
+  color: #003366;
+}
+
+.session-block ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+.session-block li {
+  padding: 5px 0;
+  border-bottom: 1px solid #ccc;
+}
