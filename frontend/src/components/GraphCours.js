@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+/* import React, { useEffect, useRef } from 'react';
 import { Network } from 'vis-network';
 import 'vis-network/styles/vis-network.css';
 
@@ -65,3 +65,4 @@ function GraphCours({ nodes, edges }) {
 }
 
 export default GraphCours;
+ */

@@ -1,26 +1,28 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { Link } from 'react-router-dom';
 import './Accueil.css';
 
 
 function Accueil() {
+  const [menuOuvert, setMenuOuvert] = useState(false);
   return (
     <div className="accueil-container">
       {/* En-tête */}
       <header className="header">
         <div className="logo">UQO</div>
-        <nav className="nav">
+        <button className="menu-toggle" onClick={() => setMenuOuvert(!menuOuvert)}>☰</button>
+
+        <nav className={`nav ${menuOuvert ? 'open' : ''}`}>
           <ul>
-            <li><Link to="/">Accueil</Link></li>
-            <li><Link to="/gererCours">GererCours</Link></li>
-            <li><Link to="/grapheCours">Graphe</Link></li>
-            <li><Link to="/outilsCheminement">Outils de cheminement</Link></li>
+            <li><Link to="/" onClick={() => setMenuOuvert(false)}>Accueil</Link></li>
+            <li><Link to="/gererCours" onClick={() => setMenuOuvert(false)}>GererCours</Link></li>
+            <li><Link to="/grapheCours" onClick={() => setMenuOuvert(false)}>Graphe</Link></li>
+            <li><Link to="/outilsCheminement" onClick={() => setMenuOuvert(false)}>Outils de cheminement</Link></li>
           </ul>
         </nav>
-        <div className="menu-icon">☰</div>
       </header>
 
-      {/* Section verte */}
+      {/* Bannière verte */}
       <section className="hero-section">
         <div className="hero-left">
           <h1>PLANIFICATION DU<br />CHEMINEMENT ÉTUDIANT</h1>
@@ -42,17 +44,17 @@ function Accueil() {
 
       {/* Blocs */}
       <section className="features-section">
-        <Link to="/gererCours" className="feature">
-          <div className="feature-title">📊 Programmes</div>
-          <div className="feature-desc">Liste et gestion des programmes d’études offerts.</div>
+        <Link to="/gererCours" className="feature teal">
+          <div className="feature-title">📊 Gestion des cours</div>
+          <div className="feature-desc">Gestion des cours offerts.</div>
         </Link>
-        <Link to="/graphe" className="feature blue">
+        <Link to="/grapheCours" className="feature blue">
           <div className="feature-title">🔗 Graphe</div>
           <div className="feature-desc">Visualisation des dépendances entre les cours.</div>
         </Link>
         <Link to="/cours" className="feature red">
           <div className="feature-title">📋 Liste des cours</div>
-          <div className="feature-desc">Gestion des cours disponibles dans les programmes.</div>
+          <div className="feature-desc">Liste des cours disponibles dans les programmes.</div>
         </Link>
         <Link to="/outilsCheminement" className="feature dark">
           <div className="feature-title">🛠️ Outils de cheminement</div>

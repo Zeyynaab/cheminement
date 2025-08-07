@@ -13,8 +13,7 @@ class Cours(models.Model):
     credits = models.IntegerField()
     programme = models.ForeignKey(Programme, on_delete=models.CASCADE)
     est_optionnel= models.BooleanField(default=False)
-    #session = models.ForeignKey('Session',on_delete=models.CASCADE, related_name='cours_session')
-
+    
 
     def __str__(self):
         return self.nom_cours
@@ -23,9 +22,11 @@ class Cours(models.Model):
 class Session(models.Model):
     nom_session = models.CharField(max_length=30)
     numero_session = models.IntegerField(default=1) 
-    total_credits = models.IntegerField(default=0)
-    cheminement = models.ForeignKey("Cheminement", on_delete=models.CASCADE, null=True, blank=True)
+    #total_credits = models.IntegerField(default=0)
+    #cheminement = models.ForeignKey("Cheminement", on_delete=models.CASCADE, null=True, blank=True)
     #cours = models.ManyToManyField(Cours, blank=True)
+    class Meta:
+        unique_together = ('nom_session', 'numero_session')
 
     def __str__(self):
         return f"{self.nom_session} {self.numero_session}"
@@ -61,6 +62,8 @@ class CoursParSession(models.Model):
     cheminement = models.ForeignKey("Cheminement", on_delete=models.CASCADE, related_name="cours_sessions", null=True, blank=True)
     cours = models.ForeignKey("Cours", on_delete=models.CASCADE)
     session = models.ForeignKey("Session", on_delete=models.CASCADE)  # Automne ou Hiver
-
+    credits = models.IntegerField (default = 0)
+    class Meta :
+        unique_together = ('cheminement', 'cours')
     def __str__(self):
-        return f"{self.cours.nom_cours} ({self.session.nom_session})"
+        return f"{self.cours.nom_cours} ({self.session.nom_session} {self.session.numero_session})"

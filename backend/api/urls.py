@@ -13,6 +13,7 @@ urlpatterns = [
     path('generer_cheminement/', views.generer_cheminement, name='generer_cheminement'),
     path("etudiants/", views.list_etudiants, name="list_etudiants"),
     path('graphe_cours/', views.generer_graphe),
+    path('modifier-cours-par-session/<int:id>/', views.modifier_cours_par_session, name='modifier_cours_par_session'),
 
 
     

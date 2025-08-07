@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 
-# Application definition
+# Def App 
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -52,7 +52,7 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
-CORS_ALLOW_ALL_ORIGINS = True  # À restreindre plus tard si besoin
+CORS_ALLOW_ALL_ORIGINS = True  
 
 ROOT_URLCONF = "backend.urls"
 

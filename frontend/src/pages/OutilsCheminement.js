@@ -1,14 +1,22 @@
-// pages/OutilsCheminement.js
-import React, { useState, useEffect } from 'react';
 import './OutilsCheminement.css';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function OutilsCheminement() {
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const initEtu  = params.get('etudiant')   || '';
+  const initProg = params.get('programme')  || '';
+  const [etudiantId,   setEtudiantId]   = useState(initEtu);
+  const [programmeId,  setProgrammeId]  = useState(initProg);
   const [etudiants, setEtudiants] = useState([]);
   const [programmes, setProgrammes] = useState([]);
-  const [etudiantId, setEtudiantId] = useState('');
-  const [programmeId, setProgrammeId] = useState('');
   const [cheminement, setCheminement] = useState([]);
-  const [coursOptionnels, setCoursOptionnels] = useState([]);
+  const [creditsProg, setCreditsProg] = useState(0);
+  const [selectedEtudiant, setSelectedEtudiant] = useState(null);
+  const [selectedProgramme, setSelectedProgramme] = useState(null);
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/etudiants/')
@@ -22,105 +30,196 @@ function OutilsCheminement() {
       .catch(err => console.error("Erreur programmes :", err));
   }, []);
 
+  //Preselection des noms etudiants et programmes
+     useEffect(() => {
+    if (etudiants.length > 0 && etudiantId) {
+      const etu = etudiants.find(e => e.id === parseInt(etudiantId, 10));
+      setSelectedEtudiant(etu || null);
+    }
+    if (programmes.length > 0 && programmeId) {
+      const prog = programmes.find(p => p.id === parseInt(programmeId, 10));
+      setSelectedProgramme(prog || null);
+    }
+  }, [etudiants, programmes, etudiantId, programmeId]); 
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const etu = etudiants.find(x => x.id === parseInt(etudiantId));
+    const prog = programmes.find(x => x.id === parseInt(programmeId));
+    setSelectedEtudiant(etu || null);
+    setSelectedProgramme(prog || null);
 
     try {
-      const response = await fetch("http://127.0.0.1:8000/api/generer_cheminement/", {
+      const res = await fetch("http://127.0.0.1:8000/api/generer_cheminement/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id_etudiant: etudiantId })
       });
-
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Erreur brute :", errorText);
-        alert("Erreur lors de la génération du cheminement");
-        return;
-      }
-
-      const data = await response.json();
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
       setCheminement(data.cours_par_session || []);
-      setCoursOptionnels(data.cours_optionnels || []);
-    } catch (error) {
-      console.error("❌ Erreur fetch :", error);
-      alert("Une erreur est survenue");
+      setCreditsProg(data.credits_totaux || 0);
+    } catch (err) {
+      console.error(err);
+      alert("Erreur lors de la génération");
     }
   };
 
+
+  const exporterPDF = () => {
+
+    //export LOGO UQO
+    const logo = new Image();
+    logo.src = '/UQO3.png';
+    logo.onload = () => {
+
+    const input = document.getElementById('cheminement-pdf');
+    // Capture le tableau
+    html2canvas(input, { scale: 2 }).then(canvas => {
+      const imgTable = canvas.toDataURL('image/png');
+      const pdf = new jsPDF('p','mm','a4');
+      const W = pdf.internal.pageSize.getWidth();
+      const H = (canvas.height * W) / canvas.width;
+
+      // Bande de header bleu
+      pdf.setFillColor(180,180,180); // 0,70,122
+      pdf.rect(0, 0, W, 30, 'F');
+
+      // Logo à gauche
+      pdf.addImage(logo, 'PNG', 10, 5, 20, 12);
+
+      // Titre centré en blanc
+      pdf.setTextColor(255);
+      pdf.setFontSize(16);
+      pdf.setFont('helvetica', 'bold');
+      pdf.text('Cheminement régulier', W/2, 18, { align: 'center' });
+
+      
+
+      // Info en dessus
+      pdf.setTextColor(0);
+      pdf.setFontSize(12);
+      // Bloc de gauche
+      pdf.text(`Nom : ${selectedEtudiant?.prenom_etudiant || ''} ${selectedEtudiant?.nom_etudiant || ''}`, 10, 40);
+      pdf.text(`Programme : ${selectedProgramme?.nom_programme || ''}`, 10, 48);
+      // Bloc de droite
+      pdf.text(`Version : ${selectedProgramme?.version || 'N/A'}`, W - 70, 40);
+      pdf.text(`Crédits totaux : ${creditsProg}`, W - 70, 48);
+
+      // Séparation
+      pdf.setDrawColor(200);
+      pdf.setLineWidth(0.5);
+      pdf.line(10, 52, W - 10, 52);
+
+      // Insère le tableau sous ces infos
+      pdf.addImage(imgTable, 'PNG', 10, 55, W - 20, H);
+
+      // Sauvegarde
+      pdf.save('cheminement_etudiant.pdf');
+    });
+  };
+};
+
   return (
-    <div className="cheminement-container">
-      <h2>Générer un cheminement</h2>
+    <div className="layout">
+      <nav className="sidebar">
+        <ul>
+          <li><a href="/">🏠 Accueil</a></li>
+          <li><a href="/gererCours">📚 Gestion des cours</a></li>
+          <li><a href="/etudiants">👤 Étudiants</a></li>
+          <li><a href="/grapheCours">📚 Graphe</a></li>
+          <li className="active"><a href="/outilsCheminement">⚙️ Outils de cheminement</a></li>
+        </ul>
+      </nav>
 
-      <form onSubmit={handleSubmit} className="form-cheminement">
-        <label>Étudiant :</label>
-        <select value={etudiantId} onChange={(e) => setEtudiantId(e.target.value)}>
-          <option value="">Sélectionner...</option>
-          {etudiants.map((e) => (
-            <option key={e.id} value={e.id}>{e.nom_etudiant}</option>
-          ))}
-        </select>
+      <div className="content-wrapper">
+        <header className="topbar">
+          <button
+            id="toggleSidebar"
+            className="barreDeroulante"
+            onClick={() => document.body.classList.toggle("collapsed")}
+          >☰</button>
+          <h1>UQO</h1>
+        </header>
 
-        <label>Programme :</label>
-        <select value={programmeId} onChange={(e) => setProgrammeId(e.target.value)}>
-          <option value="">Sélectionner...</option>
-          {programmes.map((p) => (
-            <option key={p.id} value={p.id}>{p.nom_programme}</option>
-          ))}
-        </select>
+        <main>
+          <h2>Générer un cheminement</h2>
+          <div className="cheminement-container">
+            {/* Formulaire*/}
+            <form onSubmit={handleSubmit} className="form-cheminement">
+              <label>Étudiant :</label>
+              <select
+                value={etudiantId}
+                onChange={e => setEtudiantId(e.target.value)}
+              >
+                <option value="">Sélectionner...</option>
+                {etudiants.map(e => (
+                  <option key={e.id} value={e.id}>{e.nom_etudiant}</option>
+                ))}
+              </select>
 
-        <button type="submit">Générer le cheminement</button>
-      </form>
+              <label>Programme :</label>
+              <select
+                value={programmeId}
+                onChange={e => setProgrammeId(e.target.value)}
+              >
+                <option value="">Sélectionner...</option>
+                {programmes.map(p => (
+                  <option key={p.id} value={p.id}>{p.nom_programme}</option>
+                ))}
+              </select>
 
-      {cheminement.length > 0 && (
-        <div className="resultat-cheminement">
-          <h3>Cheminement régulier</h3>
-          <div className="tableau-sessions">
-            {cheminement.map((sessionBlock, index) => (
-              <div key={index} className="session-block">
-                <h4>{sessionBlock.session}</h4>
-                {sessionBlock.cours.length > 0 ? (
-                  <ul>
-                    {sessionBlock.cours.map((cours, idx) => (
-                      <li key={idx} style={{ padding: '4px 8px', display: 'block' }}>
-                        <span style={{ fontWeight: 'bold', color: '#1e5b8c', marginRight: '25px' }}>
-                          {cours.code_cours}
-                        </span>
-                        <span>{cours.nom_cours}</span>
-                        {cours.prerequis && cours.prerequis.length > 0 && (
-                          <span style={{ marginLeft: '10px', fontStyle: 'italic', color: 'gray' }}>
-                            Préalables ( {cours.prerequis.join(' et ')} )
-                          </span>
-                        )}
-                      </li>
-                    ))}
-                  </ul>
-                ) : (
-                  <p style={{ fontStyle: "italic", color: "#777", marginLeft: '10px' }}>
-                    Aucun cours pour cette session
-                  </p>
-                )}
-              </div>
-            ))}
+              <button type="submit">Générer le cheminement</button>
+            </form>
+            {cheminement.length > 0 && (
+              <>
+                <div id="cheminement-pdf" className="resultat-cheminement">
+                  <div className="tableau-wrapper">
+                    <table className="tableau-cheminement">
+                      <thead>
+                        <tr>
+                          {cheminement.map((s,i) => (
+                            <th key={i}>{s.session}</th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          {cheminement.map((s,i) => (
+                            <td key={i}>
+                              {s.cours.length
+                                ? s.cours.map((c,j) => (
+                                    <div key={j}>
+                                      {c.code_cours}
+                                      {c.prerequis?.length > 0 && (
+                                        <span className='prereq'>
+                                         (Préalables : {c.prerequis.join(',')})
+                                        </span>
+                                      )}
+                                    </div>
+                                  ))
+                                : <div style={{fontStyle:'italic'}}>Aucun cours</div>}
+                            </td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+
+                {/* Bouton export  */}
+                <button onClick={exporterPDF} className="btn-export">
+                  📄 Exporter en PDF
+                </button>
+              </>
+            )}
           </div>
-        </div>
-      )}
+        </main>
 
-      {coursOptionnels.length > 0 && (
-        <div className="session-block">
-          <h3>Cours optionnels</h3>
-          <ul>
-            {coursOptionnels.map((cours, index) => (
-              <li key={index} style={{ padding: '4px 8px', display: 'block' }}>
-                <span style={{ fontWeight: 'bold', color: '#1e5b8c', marginRight: '25px' }}>
-                  {cours.code_cours}
-                </span>
-                <span>{cours.nom_cours}</span>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+        <footer>
+          <p>UQO | Université du Québec en Outaouais, 2025. Tous droits réservés.</p>
+        </footer>
+      </div>
     </div>
   );
 }

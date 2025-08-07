@@ -4,6 +4,80 @@
   min-height: 100vh;
 }
 
+/* BARRE LATÉRALE GAUCHE */
+.sidebar {
+    background-color: #04345c;
+    width: 220px;
+    min-height: 100vh;
+    color: white;
+    padding-top: 30px;
+    flex-shrink: 0;
+    transition: transform 0.3s ease, width 0.3s ease; /*  animation pour collapse  */
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar ul li {
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: default;
+    background-color: transparent;
+}
+
+.sidebar ul li:hover,
+.sidebar ul li.active {
+    background-color: #364a6b;
+}
+
+.sidebar ul li a {
+    color: white;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* BOUTON DEROULANT */
+.barreDeroulante {
+    font-size: 24px;
+  background: transparent !important;
+  color: #04345c;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  outline: none;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+.barreDeroulante:focus,
+.barreDeroulante:active,
+.barreDeroulante:focus-visible {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+/* EN-TETE*/
+header.topbar {
+    background-color: #e0e0e0;
+    color: black;
+    padding: 10px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 60px;
+}
+header.topbar h1 {
+    font-size: 35px;
+    margin: 0;
+}
+
+/*Contenu principal*/
+
 .form-cheminement {
   display: flex;
   flex-direction: column;
@@ -47,7 +121,24 @@
 .tableau-sessions {
   display: block;
 }
-/* === Pour laisser les blocs collés === */
+
+.cheminement-container{
+background-color: white;
+}
+
+/*main*/
+main {
+    flex: 1;
+    padding: 30px;
+}
+/* Titre de section  */
+h2 {
+    color: #0b3556;
+    font-size: 28px;
+    margin-bottom: 20px;
+}
+
+/* Pour laisser les blocs collés*/
 .session-block {
   background-color: #f3f3f3;
   padding: 15px;
@@ -68,4 +159,63 @@
 .session-block li {
   padding: 5px 0;
   border-bottom: 1px solid #ccc;
+}
+
+/*BOUTON EXPORT */
+
+.btn-export {
+  margin-top: 25px;
+  padding: 12px 20px;
+  background-color: #04345c;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+/*TABLEAU CHEMINEMENT*/
+.tableau-wrapper {
+  width:100%;
+  overflow-x:auto;
+}
+
+.tableau-cheminement {
+  width:100%;
+  min-width:800px;
+  border-collapse:collapse;
+  table-layout:auto;
+  margin-top:20px;
+  font-size:13px;
+}
+
+.tableau-cheminement th,
+.tableau-cheminement td {
+  border:1px solid #ccc;
+  padding:8px;
+  text-align:center;
+  vertical-align:top;
+  word-wrap:break-word;
+}
+
+.tableau-cheminement th {
+  background-color:#f0f4f8;
+  color:#003366;
+  font-weight:bold;
+  white-space:nowrap;
+}
+
+/* Espacement et interlignage des cours */
+.tableau-cheminement td > div {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+
+/* Style pour les préalables */
+.prereq {
+  display: block;
+  color: #777;
+  font-style: italic;
+  font-size: 11px;
+  margin-top: 4px;
 }

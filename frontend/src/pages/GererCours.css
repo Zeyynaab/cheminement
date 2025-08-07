@@ -11,7 +11,7 @@ html, body {
     min-height: 100vh;
 }
 
-/* === SIDEBAR === */
+/* === BARRE LATÉRALE GAUCHE=== */
 .sidebar {
     background-color: #04345c;
     width: 220px;
@@ -19,7 +19,7 @@ html, body {
     color: white;
     padding-top: 30px;
     flex-shrink: 0;
-    transition: transform 0.3s ease, width 0.3s ease;
+    transition: transform 0.3s ease, width 0.3s ease; /* animation pour collapse */
 }
 
 .sidebar ul {
@@ -34,11 +34,12 @@ html, body {
     align-items: center;
     gap: 10px;
     cursor: default;
+    background-color: transparent;
 }
 
 .sidebar ul li:hover,
 .sidebar ul li.active {
-    background-color: #1256c3;
+    background-color: #364a6b;
 }
 
 .sidebar ul li a {
@@ -47,7 +48,27 @@ html, body {
     cursor: pointer;
 }
 
-/* === HEADER === */
+/* BOUTON DEROULANT */
+.barreDeroulante {
+    font-size: 24px;
+  background: transparent !important;
+  color: #04345c;
+  border: none;
+  cursor: pointer;
+  padding: 5px;
+  outline: none;
+  box-shadow: none !important;
+  -webkit-tap-highlight-color: transparent;
+}
+.barreDeroulante:focus,
+.barreDeroulante:active,
+.barreDeroulante:focus-visible {
+  background: transparent;
+  outline: none;
+  box-shadow: none;
+}
+
+/* EN-TETE  */
 header.topbar {
     background-color: #e0e0e0;
     color: black;
@@ -57,36 +78,11 @@ header.topbar {
     justify-content: space-between;
     height: 60px;
 }
-
 header.topbar h1 {
     font-size: 35px;
     margin: 0;
 }
 
-/* === MAIN === */
-.container {
-    display: flex;
-    flex: 1;
-    min-height: calc(100vh - 60px);
-    transition: all 0.3s ease;
-    overflow-x: hidden;
-}
-
-.content-wrapper {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    background-color: white;
-}
-
-.content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding: 40px;
-    box-sizing: border-box;
-    background-color: white;
-}
 
 main {
     flex: 1;
@@ -99,7 +95,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* === FORMULAIRES === */
+/* FORMULAIRES */
 form {
     background-color: white;
     padding: 20px;
@@ -117,35 +113,48 @@ form select {
     border-radius: 4px;
 }
 
-button[type="submit"], button.modifier, button.supprimer {
-    background-color: #b2cdf8;
-    color: white;
-    border: none;
-    padding: 10px 15px;
-    border-radius: 6px;
-    cursor: pointer;
-    margin-right: 10px;
+button[type="submit"], button.ajouter_prq, button.modif_supp, button.assoicer {
+  background-color: #b2cdf8;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-right: 10px;
 }
 
+
 button.modifier {
-    background-color: #2d78f4;
+    background-color: transparent ; /*#2d78f4*/
+    padding: 10px 15px;
+    color: #364a6b;
 }
 
 button.supprimer {
-    background-color: #ee5d47;
+    background-color: transparent; /* ##ee5d47*/
+    color: #364a6b;
 }
 
-.message {
-    color: green;
-    font-weight: bold;
-    margin-bottom: 20px;
+button:hover{
+  background-color: #5993f1;
+  color: white;
+  box-shadow: none;
+  /*background-color: #1256c3;*/
+  
 }
 
-.message.erreur {
-    color: red;
+button.supprimer:hover {
+  background-color: transparent;
+  color: red;
+  box-shadow: none;
+}
+button.modifier:hover{
+  background-color: transparent;
+  color: inherit;
+  box-shadow: none;
 }
 
-/* === TABLE === */
+/* TABLE */
 ul {
     list-style: none;
     padding: 0;
@@ -161,7 +170,22 @@ ul li {
     align-items: center;
 }
 
-/* === FOOTER === */
+.cours-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px;
+  margin: 8px 0;
+  background-color: #f4f4f4;
+  border-radius: 6px;
+}
+
+.cours-item .actions {
+  display: flex;
+  gap: 10px;
+}
+
+/* FOOTER */
 footer {
     text-align: center;
     font-size: 14px;
@@ -171,7 +195,7 @@ footer {
     border-top: 1px solid #ddd;
 }
 
-/* === RESPONSIVE TABLE === */
+/* RESPONSIVE TABLE */
 @media (max-width: 768px) {
     ul li {
         flex-direction: column;
