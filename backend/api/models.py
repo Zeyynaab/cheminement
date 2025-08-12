@@ -14,7 +14,10 @@ class Cours(models.Model):
     programme = models.ForeignKey(Programme, on_delete=models.CASCADE)
     est_optionnel= models.BooleanField(default=False)
     
-
+    class Meta:
+        verbose_name = "Cours"
+        verbose_name_plural = "Cours"
+        
     def __str__(self):
         return self.nom_cours
 
@@ -40,6 +43,10 @@ class Prerequis(models.Model):
         Cours, related_name="cours_prerequis", on_delete=models.CASCADE
     )
 
+    class Meta:
+        verbose_name = "Prérequis"
+        verbose_name_plural = "Prérequis"
+        
     def __str__(self):
         return f"{self.prerequis.nom_cours} (prérequis de {self.cours.nom_cours})"
 

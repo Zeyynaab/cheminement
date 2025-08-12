@@ -3,6 +3,9 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
+import { FaHome, FaBook, FaUser, FaProjectDiagram, FaCog, FaFilePdf } from "react-icons/fa";
+import PopUp from "../components/PopUp.js";
+
 
 function OutilsCheminement() {
   const location = useLocation();
@@ -17,6 +20,7 @@ function OutilsCheminement() {
   const [creditsProg, setCreditsProg] = useState(0);
   const [selectedEtudiant, setSelectedEtudiant] = useState(null);
   const [selectedProgramme, setSelectedProgramme] = useState(null);
+  const [popupEtudiants, setPopupEtudiants] = useState(false);
 
   useEffect(() => {
     fetch('http://127.0.0.1:8000/api/etudiants/')
@@ -124,11 +128,18 @@ function OutilsCheminement() {
     <div className="layout">
       <nav className="sidebar">
         <ul>
-          <li><a href="/">🏠 Accueil</a></li>
-          <li><a href="/gererCours">📚 Gestion des cours</a></li>
-          <li><a href="/etudiants">👤 Étudiants</a></li>
-          <li><a href="/grapheCours">📚 Graphe</a></li>
-          <li className="active"><a href="/outilsCheminement">⚙️ Outils de cheminement</a></li>
+          <li><a href="/"><FaHome /> Accueil</a></li>
+          <li><a href="/gererCours"><FaBook /> Gestion des cours</a></li>
+          <li>
+            <a
+              href="/etudiants"
+              onClick={(e) => { e.preventDefault(); setPopupEtudiants(true); }}
+            >
+              <FaUser />Étudiants
+            </a>
+          </li>
+          <li><a href="/grapheCours"><FaProjectDiagram /> Graphe</a></li>
+          <li className="active"><a href="/outilsCheminement"><FaCog /> Outils de cheminement</a></li>
         </ul>
       </nav>
 
@@ -209,7 +220,7 @@ function OutilsCheminement() {
 
                 {/* Bouton export  */}
                 <button onClick={exporterPDF} className="btn-export">
-                  📄 Exporter en PDF
+                  <FaFilePdf />Exporter en PDF
                 </button>
               </>
             )}
@@ -219,6 +230,13 @@ function OutilsCheminement() {
         <footer>
           <p>UQO | Université du Québec en Outaouais, 2025. Tous droits réservés.</p>
         </footer>
+        <PopUp
+          open={popupEtudiants}
+          titre="Fonctionnalité en développement"
+          message="La section « Étudiants » n’est pas encore disponible."
+          onFermer={() => setPopupEtudiants(false)}
+        />
+
       </div>
     </div>
   );

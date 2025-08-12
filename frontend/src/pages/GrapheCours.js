@@ -5,6 +5,9 @@ import "./GrapheCours.css";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 import { useNavigate } from "react-router-dom";
+import { FaHome, FaBook, FaUser, FaProjectDiagram, FaCog, FaFilePdf, FaArrowRight } from "react-icons/fa";
+import PopUp from "../components/PopUp.js";
+
 
 const GrapheCours = () => {
   const navigate = useNavigate();
@@ -18,6 +21,8 @@ const GrapheCours = () => {
   const [message, setMessage] = useState(
     "Veuillez sélectionner un programme ou un étudiant"
   );
+  const [popupEtudiants, setPopupEtudiants] = useState(false);
+
 
   useEffect(() => {
     fetch("http://127.0.0.1:8000/api/programmes/")
@@ -202,11 +207,18 @@ const GrapheCours = () => {
     <div className="layout">
       <nav className="sidebar">
         <ul>
-          <li><a href="/">🏠 Accueil</a></li>
-          <li><a href="/gererCours">📚 Gestion des cours</a></li>
-          <li><a href="/etudiants">👤 Étudiants</a></li>
-          <li className="active"><a href="/grapheCours">📚 Graphe</a></li>
-          <li><a href="/outilsCheminement">⚙️ Outils de cheminement</a></li>
+          <li><a href="/"><FaHome />Accueil</a></li>
+          <li><a href="/gererCours"><FaBook /> Gestion des cours</a></li>
+          <li>
+            <a
+              href="/etudiants"
+              onClick={(e) => { e.preventDefault(); setPopupEtudiants(true); }}
+            >
+              <FaUser />Étudiants
+            </a>
+          </li>
+<li className="active"><a href="/grapheCours"><FaProjectDiagram />Graphe</a></li>
+          <li><a href="/outilsCheminement"><FaCog />Outils de cheminement</a></li>
         </ul>
       </nav>
 
@@ -259,7 +271,7 @@ const GrapheCours = () => {
             {networkRef.current && (
               <>
                 <button onClick={exportPdf} style={{ marginTop: 12, marginRight: 8 }}>
-                  📄 Exporter en PDF
+                  <FaFilePdf /> Exporter en PDF
                 </button>
                 <button
                   className="btn-lien-cheminement"
@@ -267,7 +279,7 @@ const GrapheCours = () => {
                   onClick={() => navigate(`/outilsCheminement?etudiant=${etudiantId}&programme=${programmeId}`)}
                   disabled={!etudiantId || !programmeId}
                 >
-                  ➡️ Voir le cheminement
+                  <FaArrowRight /> Voir le cheminement
                 </button>
               </>
             )}
@@ -282,6 +294,13 @@ const GrapheCours = () => {
         <footer>
           <p>UQO | Université du Québec en Outaouais, 2025. Tous droits réservés.</p>
         </footer>
+        <PopUp
+          open={popupEtudiants}
+          titre="Fonctionnalité en développement"
+          message="La section « Étudiants » n’est pas encore disponible."
+          onFermer={() => setPopupEtudiants(false)}
+        />
+
       </div>
     </div>
   );

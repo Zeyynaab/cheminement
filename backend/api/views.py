@@ -12,6 +12,7 @@ from .serializers import (
     CoursParSessionSerializer
 )
 from collections import defaultdict
+from django.views.decorators.csrf import csrf_exempt
 
 #vue pour la liste des programmes 
 @api_view(['GET'])
@@ -35,6 +36,7 @@ def list_cours(request):
     return JsonResponse(serializer.data, safe=False)
 
 #vue pour ajouter un cours 
+@csrf_exempt
 @api_view(['POST'])
 def ajouter_cours(request):
     serializer = CoursSerializer(data=request.data)
@@ -44,6 +46,7 @@ def ajouter_cours(request):
     return Response(serializer.errors, status=400)
 
 #vue pour modifier un cours
+@csrf_exempt
 @api_view(['PUT'])
 def modifier_cours(request, id):
     try:
@@ -59,6 +62,7 @@ def modifier_cours(request, id):
     return Response(serializer.errors, status=400)
 
 #vue pour supprimer un cours
+@csrf_exempt
 @api_view(['DELETE'])
 def supprimer_cours(request, id):
     try:
@@ -79,6 +83,7 @@ def list_prerequis(request):
     return Response(serializer.data)
 
 #vue pour ajouter un prerequis
+@csrf_exempt
 @api_view(['POST'])
 def ajouter_prerequis(request):
     serializer = PrerequisSerializer(data=request.data)
@@ -95,6 +100,7 @@ def list_sessions(request):
     return Response(serializer.data)
 
 #vue pour associer un cours a une session
+@csrf_exempt
 @api_view(['POST'])
 def associer_cours_session(request):
     # Récupérer cours et session 
@@ -126,7 +132,7 @@ def associer_cours_session(request):
     # Vérifier le plafond de 15 crédits
     if credits_existants + cours_obj.credits > 15:
         return Response(
-            {'Session complète (max 15 crédits par session).'},
+            {'error' : 'Session complète (max 15 crédits par session).'},
             status=400
         )
 
@@ -140,9 +146,10 @@ def associer_cours_session(request):
     if created:
         return Response({'message': 'Cours associé à la session.'})
     else:
-        return Response({'message': 'La liaison existait déjà : session mise à jour.'})
+        return Response({'message': 'Cours déja associé a la session: session mise à jour.'})
 
 #vue pour supprimer un cours par session
+@csrf_exempt
 @api_view(['DELETE'])
 def supprimer_cours_par_session(request, id):
     try:
@@ -154,6 +161,7 @@ def supprimer_cours_par_session(request, id):
         return Response({"error": "CoursParSession non trouvé"}, status=404)
 
 # vue pour modifier un cours par session
+@csrf_exempt
 @api_view(['PUT'])
 def modifier_cours_par_session(request, id):
     try:
@@ -172,7 +180,9 @@ def modifier_cours_par_session(request, id):
     cps.save()
     return JsonResponse({"message": "CoursParSession mis à jour avec succès"}, status=200)
 
+
 #vue pour generer un cheminement
+@csrf_exempt
 @api_view(['POST'])
 def generer_cheminement(request):
     SESSIONS_COMPLETES = ["Automne 1", "Hiver 1", "Automne 2", "Hiver 2", "Automne 3", "Hiver 3"]
@@ -198,6 +208,14 @@ def generer_cheminement(request):
         session_obj, _ = Session.objects.get_or_create(nom_session=nom, numero_session=int(num))
         sessions[label] = session_obj
 
+    # crédits cumulés existants par session (pour respecter le plafond 15)
+    session_credits = {}
+    for label, s in sessions.items():
+        total = CoursParSession.objects.filter(
+            cheminement=cheminement, session=s
+        ).aggregate(total=Sum('cours__credits'))['total'] or 0
+        session_credits[s.id] = total
+
     session_labels = list(sessions.keys())
     session_index = 0
 
@@ -212,7 +230,9 @@ def generer_cheminement(request):
     while cours_restants:
         label = session_labels[session_index % len(session_labels)]
         session_obj = sessions[label]
-        total_credits_session = 0
+
+        #partir des crédits déjà cumulés pour cette session
+        total_credits_session = session_credits.get(session_obj.id, 0)
         ajout_dans_cycle = []
 
         for cid in list(cours_restants):
@@ -230,7 +250,9 @@ def generer_cheminement(request):
                             cours=cours_obj,
                             session=session_obj
                         )
-                    total_credits_session += cours_obj.credits
+                        
+                        total_credits_session += cours_obj.credits
+                        session_credits[session_obj.id] = total_credits_session
                     ajout_dans_cycle.append(cid)
 
         for cid in ajout_dans_cycle:
@@ -241,7 +263,7 @@ def generer_cheminement(request):
         if not ajout_dans_cycle and session_index >= len(session_labels):
             break
 
-    # Préparer le résultat par session
+    #  résultat par session
     resultat_sessions = []
     for label in SESSIONS_COMPLETES:
         nom, num = label.split()
@@ -267,7 +289,7 @@ def generer_cheminement(request):
             "cours": cours_list
         })
 
-    # **Ceci : cours optionnels + total des crédits**
+    # cours optionnels + total crédits
     cours_optionnels = Cours.objects.filter(programme=programme, est_optionnel=True)
     optionnels_data = [
         {"code_cours": c.code_cours, "nom_cours": c.nom_cours}

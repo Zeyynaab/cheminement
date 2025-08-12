@@ -1,4 +1,4 @@
-/* === GLOBAL === */
+/* GLOBAL */
 html, body {
     margin: 0;
     font-family: Arial, sans-serif;
@@ -11,7 +11,7 @@ html, body {
     min-height: 100vh;
 }
 
-/* === BARRE LATÉRALE GAUCHE=== */
+/* BARRE LATÉRALE GAUCHE*/
 .sidebar {
     background-color: #04345c;
     width: 220px;
@@ -46,6 +46,12 @@ html, body {
     color: white;
     text-decoration: none;
     cursor: pointer;
+}
+
+/*Icones*/
+.sidebar a svg {
+  margin-right: 6px;
+  vertical-align: middle;
 }
 
 /* BOUTON DEROULANT */
@@ -154,6 +160,38 @@ button.modifier:hover{
   box-shadow: none;
 }
 
+button.afficher-cours {
+  font-size: 13px;      
+  padding: 4px 10px;    
+  border-radius: 6px;   
+  margin-bottom: 5px;   
+}
+
+
+/*Suppression*/
+.confirm-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-left: 6px;
+  font-size: 13px;
+  color: #6b7280; 
+}
+
+.confirm-delete .link {
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0 0 0 2px;
+  font: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.confirm-delete .link:first-of-type { color: #b91c1c; } 
+.confirm-delete .link:last-of-type  { color: #374151; } 
+
+
 /* TABLE */
 ul {
     list-style: none;
@@ -185,6 +223,67 @@ ul li {
   gap: 10px;
 }
 
+/* Filtre programme (liste des cours) */
+.filtre-programme {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 6px;
+  flex-wrap: wrap;
+}
+
+.filtre-programme label {
+  font-weight: 600; /*bold*/
+  color:  #0b3556;     /*#333*/
+}
+
+.filtre-programme select {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  background: #fff;
+  color: #000;
+  min-width: 220px;
+  cursor: pointer;
+}
+
+.filtre-programme select:focus {
+  outline: none;
+  border-color: #5993f1;
+  box-shadow: 0 0 0 3px rgba(89,147,241,0.15);
+}
+
+.badge-prog {
+  margin-left: 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #0b2e4a;
+  background: #e8f0fe;
+  border: 1px solid #c9dcff;
+  padding: 2px 6px;
+  border-radius: 12px;
+  white-space: nowrap;
+}
+
+.desc-programme {
+  font-size: 20px;
+  font-style: italic;
+  font-weight: 500;
+  color: #333;
+  margin-top: 8px;
+  margin-bottom: 15px;
+}
+
+@media (max-width: 768px) {
+  .filtre-programme {
+    gap: 8px;
+  }
+  .filtre-programme select {
+    min-width: 180px;
+  }
+}
+
+
 /* FOOTER */
 footer {
     text-align: center;
@@ -193,6 +292,28 @@ footer {
     background-color: #f0f0f0;
     color: #003d5b;
     border-top: 1px solid #ddd;
+}
+
+/* Notif  */
+.notif {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  z-index: 1100;
+  font-size: 14px;
+  font-weight: bold;
+  opacity: 0;
+  transform: translate(-50%, -50%);
+  animation: notif-in .2s ease-out forwards;
+  cursor: pointer;
+}
+
+.notif.success { color: #1b5e20; }
+.notif.error   { color: #b71c1c; }
+.notif.info    { color: #1a237e; }
+
+@keyframes notif-in {
+  to { opacity: 1; transform: translate(-50%, -50%); }
 }
 
 /* RESPONSIVE TABLE */

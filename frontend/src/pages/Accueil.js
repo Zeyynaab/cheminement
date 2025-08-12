@@ -1,10 +1,17 @@
 import React, {useState} from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import './Accueil.css';
+import { FaChartBar, FaLink, FaList, FaTools } from "react-icons/fa";
+import PopUp from "../components/PopUp.js";
+
 
 
 function Accueil() {
   const [menuOuvert, setMenuOuvert] = useState(false);
+  const [popupOuvert, setPopupOuvert] = useState(false);
+  
+
+  const navigate = useNavigate();
   return (
     <div className="accueil-container">
       {/* En-tête */}
@@ -28,8 +35,13 @@ function Accueil() {
           <h1>PLANIFICATION DU<br />CHEMINEMENT ÉTUDIANT</h1>
           <p> Cet outil permet aux administrateurs de planifier et gérer<br />
               le cheminement académique des étudiants. </p>
-          <button className="cta-button">Consulter les programmes</button>
-        <div className="semi-circle-bleu"></div>
+    
+          <button
+            className="cta-programmes"
+            onClick={() => setPopupOuvert(true)}
+          >
+            Consulter les programmes
+          </button>
         </div>
         <div className="hero-right">
           <div className="semi-circle">
@@ -45,19 +57,19 @@ function Accueil() {
       {/* Blocs */}
       <section className="features-section">
         <Link to="/gererCours" className="feature teal">
-          <div className="feature-title">📊 Gestion des cours</div>
+          <div className="feature-title"><FaChartBar /> Gestion des cours</div>
           <div className="feature-desc">Gestion des cours offerts.</div>
         </Link>
         <Link to="/grapheCours" className="feature blue">
-          <div className="feature-title">🔗 Graphe</div>
+          <div className="feature-title"><FaLink />Graphe</div>
           <div className="feature-desc">Visualisation des dépendances entre les cours.</div>
         </Link>
-        <Link to="/cours" className="feature red">
-          <div className="feature-title">📋 Liste des cours</div>
+        <Link to="#" className="feature red" onClick={(e) => { e.preventDefault(); setPopupOuvert(true); }} >
+          <div className="feature-title"> <FaList/>Liste des cours</div>
           <div className="feature-desc">Liste des cours disponibles dans les programmes.</div>
         </Link>
         <Link to="/outilsCheminement" className="feature dark">
-          <div className="feature-title">🛠️ Outils de cheminement</div>
+          <div className="feature-title"> <FaTools/>Outils de cheminement</div>
           <div className="feature-desc">Création de plans de cheminement individuels.</div>
         </Link>
       </section>
@@ -66,6 +78,14 @@ function Accueil() {
       <footer className="footer">
         UQO | Université du Québec en Outaouais, 2025. Tous droits réservés.
       </footer>
+
+      {/** Affichage PopUp */}
+       <PopUp
+        open={popupOuvert}
+        titre="Fonctionnalité en développement"
+        message="Cette section n’est pas encore disponible."
+        onFermer={() => setPopupOuvert(false)}
+        />
     </div>
   );
 }

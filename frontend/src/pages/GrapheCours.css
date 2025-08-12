@@ -52,6 +52,13 @@ html, body {
     cursor: pointer;
 }
 
+/*Icone*/
+.sidebar a svg,
+button svg {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
 /* BOUTON DEROULANT*/
 .barreDeroulante {
     font-size: 24px;
@@ -284,12 +291,16 @@ body.collapsed .sidebar ul li a::before {
 
 /*BOUTON LIEN CHEMINEMENT*/
 .btn-lien-cheminement {
-  background-color: #04345c;
+  background-color: #5993f1; 
   color: white;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
+  padding: 15px 15px;
+  border-radius: 6px;
+  font-weight: bold;
   cursor: pointer;
+}
+.btn-lien-cheminement:hover {
+  background-color: #1256c3; 
 }
 .btn-lien-cheminement:disabled {
   opacity: 0.5;

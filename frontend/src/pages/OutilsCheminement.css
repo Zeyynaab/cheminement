@@ -41,6 +41,14 @@
     cursor: pointer;
 }
 
+/*Icones*/
+.sidebar a svg,
+.btn-export svg {
+  margin-right: 6px;
+  vertical-align: middle;
+}
+
+
 /* BOUTON DEROULANT */
 .barreDeroulante {
     font-size: 24px;
