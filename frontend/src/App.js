@@ -3,7 +3,7 @@ import GererCours from './pages/GererCours';
 import Accueil from './pages/Accueil';
 import OutilsCheminement from './pages/OutilsCheminement';
 import GrapheCours from './pages/GrapheCours'; 
-import '@fortawesome/fontawesome-free/css/all.min.css'; //pour les icones
+import '@fortawesome/fontawesome-free/css/all.min.css'; 
 
 
 function App() {

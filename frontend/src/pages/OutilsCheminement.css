@@ -1,9 +1,3 @@
-.cheminement-container {
-  padding: 30px;
-  background-color: #fefaf7;
-  min-height: 100vh;
-}
-
 /* BARRE LATÉRALE GAUCHE */
 .sidebar {
     background-color: #04345c;
@@ -86,6 +80,12 @@ header.topbar h1 {
 
 /*Contenu principal*/
 
+.cheminement-container {
+  padding: 30px;
+  background-color: #fefaf7;
+  min-height: 100vh;
+}
+
 .form-cheminement {
   display: flex;
   flex-direction: column;
@@ -139,6 +139,7 @@ main {
     flex: 1;
     padding: 30px;
 }
+
 /* Titre de section  */
 h2 {
     color: #0b3556;
@@ -146,7 +147,6 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* Pour laisser les blocs collés*/
 .session-block {
   background-color: #f3f3f3;
   padding: 15px;

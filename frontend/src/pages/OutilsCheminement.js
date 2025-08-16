@@ -34,7 +34,7 @@ function OutilsCheminement() {
       .catch(err => console.error("Erreur programmes :", err));
   }, []);
 
-  //Preselection des noms etudiants et programmes
+  //Preselection des noms etudiants et programmes 
      useEffect(() => {
     if (etudiants.length > 0 && etudiantId) {
       const etu = etudiants.find(e => e.id === parseInt(etudiantId, 10));
@@ -99,7 +99,6 @@ function OutilsCheminement() {
       pdf.text('Cheminement régulier', W/2, 18, { align: 'center' });
 
       
-
       // Info en dessus
       pdf.setTextColor(0);
       pdf.setFontSize(12);
@@ -115,7 +114,7 @@ function OutilsCheminement() {
       pdf.setLineWidth(0.5);
       pdf.line(10, 52, W - 10, 52);
 
-      // Insère le tableau sous ces infos
+      // Inserer le tableau
       pdf.addImage(imgTable, 'PNG', 10, 55, W - 20, H);
 
       // Sauvegarde

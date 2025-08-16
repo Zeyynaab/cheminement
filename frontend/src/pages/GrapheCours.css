@@ -1,13 +1,13 @@
-* {
-    box-sizing: border-box;
-}
-
 /* CORPS DE LA PAGE */
 html, body {
     margin: 0;
     font-family: Arial, sans-serif;
     background-color: #f7f9fc;
     height: 100%;
+}
+
+* {
+    box-sizing: border-box;
 }
 
 /* MISE EN PAGE */
@@ -123,6 +123,7 @@ main {
     flex: 1;
     padding: 30px;
 }
+
 /* TITRE DE SECTION */
 h2 {
     color: #0b3556;
@@ -130,7 +131,7 @@ h2 {
     margin-bottom: 20px;
 }
 
-/* FORMULAIRES-CARTES-BLOCS  */ 
+/* FORMULAIRES-CARTES-BLOCS */ 
 #graphBox {
     background-color: white;
     padding: 30px;

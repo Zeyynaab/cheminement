@@ -1,4 +1,3 @@
-// GererCours.js
 import './GererCours.css';
 import React, { useState, useEffect, useMemo } from 'react';
 import { FaHome, FaBook, FaUser, FaProjectDiagram, FaCog} from "react-icons/fa";
@@ -117,9 +116,8 @@ const handleSupprimer = async (id) => {
   } else {
     notify('Impossible de supprimer ce cours.', 'error');
   }
-  setConfirmDeleteId(null); // Fermer le message de confirmation
+  setConfirmDeleteId(null); 
 };
-
 
 
   // Préremplir le formulaire pour la modification d’un cours
@@ -133,6 +131,7 @@ const handleSupprimer = async (id) => {
 // Faire défiler vers le haut pour afficher le formulaire lorsqu'on clique sur modifier
     window.scrollTo({ top: 0, behavior: 'smooth' });
    };
+   
   // Ajouter un prérequis entre 2 cours
   const handleAjouterPrerequis = async (e) => {
     e.preventDefault();

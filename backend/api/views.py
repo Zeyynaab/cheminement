@@ -115,7 +115,6 @@ def associer_cours_session(request):
     except Session.DoesNotExist:
         return Response({'error': 'Session non trouvée'}, status=404)
 
-    # Etudiant par def
     etudiant = Etudiant.objects.first()
     if not etudiant:
         return Response({'error': 'Aucun étudiant défini'}, status=404)
@@ -123,7 +122,7 @@ def associer_cours_session(request):
     #Crée ou récupére le cheminement
     cheminement, _ = Cheminement.objects.get_or_create(etudiant=etudiant)
 
-    # Calcul les crédits déjà affectés la session
+    # Calcul les crédits déjà affectés a la session
     credits_existants = CoursParSession.objects.filter(
         cheminement=cheminement,
         session=session_obj
@@ -136,7 +135,7 @@ def associer_cours_session(request):
             status=400
         )
 
-    # Créer ou met à jour la liaison cours–session
+    # Crée ou met à jour la liaison cours–session
     cours_session_obj, created = CoursParSession.objects.update_or_create(
         cheminement=cheminement,
         cours=cours_obj,
@@ -155,7 +154,6 @@ def supprimer_cours_par_session(request, id):
     try:
         cours_par_session = CoursParSession.objects.get(id=id)
         cours_par_session.delete()
-        #cours_par_session.save()
         return Response({"message": "Cours supprimé avec succès"}, status=204)
     except CoursParSession.DoesNotExist:
         return Response({"error": "CoursParSession non trouvé"}, status=404)
@@ -208,7 +206,7 @@ def generer_cheminement(request):
         session_obj, _ = Session.objects.get_or_create(nom_session=nom, numero_session=int(num))
         sessions[label] = session_obj
 
-    # crédits cumulés existants par session (pour respecter le plafond 15)
+    # crédits cumulés existants par session 
     session_credits = {}
     for label, s in sessions.items():
         total = CoursParSession.objects.filter(
@@ -263,7 +261,7 @@ def generer_cheminement(request):
         if not ajout_dans_cycle and session_index >= len(session_labels):
             break
 
-    #  résultat par session
+    #résultat par session
     resultat_sessions = []
     for label in SESSIONS_COMPLETES:
         nom, num = label.split()
